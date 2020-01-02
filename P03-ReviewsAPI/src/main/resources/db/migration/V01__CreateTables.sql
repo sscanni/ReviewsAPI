@@ -27,3 +27,4 @@ INSERT INTO reviewsdb.product(prodid, name) VALUES (2,"Dell XPS 13 Laptop Comput
 INSERT INTO reviewsdb.product(prodid, name) VALUES (3,"Lenovo Laptop Computer");
 INSERT INTO reviewsdb.product(prodid, name) VALUES (4,"Dell 27 inch Monitor");
 INSERT INTO reviewsdb.product(prodid, name) VALUES (5,"HP Laptop");
+

@@ -1,9 +1,7 @@
 package com.udacity.course3.reviews.controller;
 
-//import com.udacity.course3.reviews.ReviewRepository.CommentsRepository;
 import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
-//import com.udacity.course3.reviews.entity.Comments;
 import com.udacity.course3.reviews.entity.Comments;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Reviews;
@@ -12,11 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.Random;
 
 /**
  * Spring REST controller for working with review entity.
@@ -30,8 +25,6 @@ public class ReviewsController {
     private ProductRepository productRepository;
     @Autowired
     private ReviewsRepository reviewsRepository;
-//    @Autowired
-//    private CommentsRepository commentsRepository;
 
         /**
      * Creates a review for a product.
@@ -46,29 +39,13 @@ public class ReviewsController {
      */
 
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.POST)
-    public ResponseEntity<?> createReviewForProduct(@PathVariable("productId") Integer productId) {
-
-        UUID uuid = UUID.randomUUID();
-        String randomUUIDString = uuid.toString();
-
-        System.err.println("Random UUID String = " + randomUUIDString);
-        System.err.println("UUID version       = " + uuid.version());
-        System.err.println("UUID variant       = " + uuid.variant());
-
-        Random rand = new Random();
-        int rand_int1 = rand.nextInt(Integer.MAX_VALUE);
-        System.err.println("rand_int1= " + rand_int1);
-        System.err.println("integer max= " + Integer.MAX_VALUE);
+    public ResponseEntity<?> createReviewForProduct(@RequestBody Comments comments,
+                                            @PathVariable("productId") Integer productId) {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        System.err.println(product.getProdid());
-
         List<Reviews> curReviews = product.getReviews();
-
-        System.err.println(curReviews.size());
-
         Reviews reviews = new Reviews();
         reviews.setProdid(productId);
 
@@ -77,14 +54,16 @@ public class ReviewsController {
 
         reviews = reviewsRepository.save(reviews);
 
-        Comments comments = new Comments();
         comments.setReviewid(reviews.getReviewid());
-        comments.setComment("This is a test");
+        comments.setComment(comments.getComment());
         reviews.setComments(comments);
 
         reviewsRepository.save(reviews);
 
-        return new ResponseEntity<>(product, HttpStatus.OK);
+        Product updatedProduct = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
     /**
@@ -95,6 +74,10 @@ public class ReviewsController {
      */
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
     public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
-        throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(ProductNotFoundException::new);
+
+        List<Reviews> reviews = product.getReviews();
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

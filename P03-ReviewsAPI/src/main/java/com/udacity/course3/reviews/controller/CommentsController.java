@@ -1,18 +1,14 @@
 package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.ReviewRepository.CommentsRepository;
-import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
 import com.udacity.course3.reviews.entity.Comments;
-import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Reviews;
-import com.udacity.course3.reviews.service.ProductNotFoundException;
 import com.udacity.course3.reviews.service.ReviewsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import java.util.List;
 
@@ -45,7 +41,6 @@ public class CommentsController {
         Reviews reviews = reviewsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
-        //TODO change ReviewsNotFoundException to CommentsNotFoundException
         Comments c = commentsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
@@ -66,8 +61,11 @@ public class CommentsController {
      * @param reviewId The id of the review.
      */
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
-    public List<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
+    //public List<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
+
+    public ResponseEntity<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
         List<Comments> list = commentsRepository.getCommentsbyReviewId(reviewId);
-        return list;
+        if (list.isEmpty()) { return new ResponseEntity("404: Review/Comment Not found", HttpStatus.NOT_FOUND); }
+        return new ResponseEntity<List<Comments>>(list, HttpStatus.OK);
     }
 }

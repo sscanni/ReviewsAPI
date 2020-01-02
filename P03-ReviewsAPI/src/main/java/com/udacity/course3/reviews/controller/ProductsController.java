@@ -4,15 +4,11 @@ import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.service.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpServerErrorException;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,14 +32,17 @@ public class ProductsController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@Valid @RequestBody Product product) {
 
-//        if (product.getId() != null) {
-//            return productRepository.findById(product.getId())
-//                    .map(productToUpdate -> {
-//                        productToUpdate.setName(product.getName());
-//                        return productRepository.save(productToUpdate);
-//                    }).orElseThrow(ProductNotFoundException::new);
-//        }
-        Product newProduct = productRepository.save(product);
+        if (product.getProdid() != null) {
+            Product updateProduct = productRepository.findById(product.getProdid())
+                    .orElseThrow(ProductNotFoundException::new);
+            updateProduct.setName(product.getName());
+            productRepository.save(updateProduct);
+            return;
+        }
+        Product p = new Product();
+        p.setName(product.getName());
+
+        productRepository.save(product);
     }
 
     /**
