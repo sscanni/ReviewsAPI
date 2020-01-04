@@ -17,12 +17,7 @@ public class Comments {
     @Column(name = "reviewid")
     private Integer reviewid;
 
-//    @OneToOne
-//    @MapsId
-//    private Reviews reviews;
-
-    public Comments() {
-    }
+    public Comments() { }
 
     public Integer getId() { return id; }
 
@@ -36,11 +31,4 @@ public class Comments {
 
     public void setReviewid(Integer reviewid) { this.reviewid = reviewid; }
 
-//    public Reviews getReviews() {
-//        return reviews;
-//    }
-//
-//    public void setReviews(Reviews reviews) {
-//        this.reviews = reviews;
-//    }
 }

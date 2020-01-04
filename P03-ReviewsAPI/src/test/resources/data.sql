@@ -4,3 +4,7 @@ INSERT INTO product(prodid, name) VALUES (3,'Lenovo Laptop Computer');
 INSERT INTO product(prodid, name) VALUES (4,'Dell 27 inch Monitor');
 INSERT INTO product(prodid, name) VALUES (5,'HP Laptop');
 
+INSERT INTO reviews(reviewid, prodid) VALUES (1,1);
+
+INSERT INTO comments(id, reviewid, comment) VALUES (1,1, 'This is a new review inserted from sql.');
+

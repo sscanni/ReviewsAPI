@@ -12,15 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -30,22 +22,14 @@ import javax.sql.DataSource;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class ReviewsApplicationTests {
 
-//	@Autowired
-//	private TestRestTemplate restTemplate;
-//
-//	@LocalServerPort
-//	private int port;
-//
-//	private String getRootUrl() {
-//		return "http://localhost:" + port;
-//	}
+	String reviewComment1 = "This is a new review inserted from sql.";
+	String reviewComment2 = "This is a test review and comment";
 
 	@Autowired private DataSource dataSource;
 	@Autowired private JdbcTemplate jdbcTemplate;
@@ -69,19 +53,23 @@ public class ReviewsApplicationTests {
 	}
 	@Test
 	public void testProduct(){
+		//Expect 5 products
 		List<Product> prodList = productRepository.findAll();
 		assertThat(prodList.size()).isEqualTo(5);
 
+		//add a new product
 		Product addProd = new Product();
 		addProd.setName("New Product");
 		productRepository.save(addProd);
 
+		//we should now have 6 products
 		assertThat(productRepository.findAll().size()).isEqualTo(6);
 
+		//verify that we have expected products. Product 1 is the only one with a review.
 		Product testProd = new Product();
 		testProd = productRepository.findById(1).orElseThrow(ProductNotFoundException::new);
 		assertThat(testProd.getName()).isEqualTo("Dell XPS Desktop Computer");
-		assertThat(testProd.getReviews()).isEmpty();
+		assertThat(testProd.getReviews()).isNotEmpty();
 		testProd = productRepository.findById(2).orElseThrow(ProductNotFoundException::new);
 		assertThat(testProd.getName()).isEqualTo("Dell XPS 13 Laptop Computer");
 		assertThat(testProd.getReviews()).isEmpty();
@@ -96,33 +84,40 @@ public class ReviewsApplicationTests {
 		assertThat(testProd.getReviews()).isEmpty();
 	}
 	@Test
-	public void getComments_byReviewId() {
-		List<Comments> list = commentsRepository.getCommentsbyReviewId(1);
-		assertThat(list.size()).isEqualTo(1);
-	}
-//	@Test
-//	public void saveReviews() {
-//		Product product = productRepository.findById(productId)
-//				.orElseThrow(ProductNotFoundException::new);
-//
-//		List<Reviews> curReviews = product.getReviews();
-//		Reviews reviews = new Reviews();
-//		reviews.setProdid(productId);
-//
-//		curReviews.add(reviews);
-//		product.setReviews(curReviews);
-//
-//		reviews = reviewsRepository.save(reviews);
-//
-//		comments.setReviewid(reviews.getReviewid());
-//		comments.setComment(comments.getComment());
-//		reviews.setComments(comments);
-//
-//		reviewsRepository.save(reviews);
-//
-//		Product updatedProduct = productRepository.findById(productId)
-//				.orElseThrow(ProductNotFoundException::new);
-//	}
+	public void testReviews() {
 
+		Product product = productRepository.findById(1)
+				.orElseThrow(ProductNotFoundException::new);
+
+		List<Reviews> curReviews = product.getReviews();
+		Reviews reviews = new Reviews();
+		reviews.setProdid(1);
+		curReviews.add(reviews);
+		product.setReviews(curReviews);
+
+		reviews = reviewsRepository.save(reviews);
+
+		Comments comments = new Comments();
+		comments.setReviewid(reviews.getReviewid());
+		comments.setComment(reviewComment2);
+		reviews.setComments(comments);
+
+		reviewsRepository.save(reviews);
+
+		Product updatedProduct = productRepository.findById(1)
+		.orElseThrow(ProductNotFoundException::new);
+
+		//Expect 2 reviews for Product #1
+		assertThat(updatedProduct.getReviews().size()).isEqualTo(2);
+		assertThat(updatedProduct.getReviews().get(0).getComments().getComment()).isEqualTo(reviewComment1);
+		assertThat(updatedProduct.getReviews().get(1).getComments().getComment()).isEqualTo(reviewComment2);
+
+	}
+	@Test
+	public void testComments() {
+		List<Comments> comments = commentsRepository.getCommentsbyReviewId(1);
+		assertThat(comments.size()).isEqualTo(1);
+		assertThat(comments.get(0).getComment()).isEqualTo(reviewComment1);
+	}
 
 }
