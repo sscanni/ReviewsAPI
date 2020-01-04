@@ -9,8 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query("select p from Product p order by p.name asc")
-    List<Product> getAllProducts();
+//    @Query("select p from Product p order by p.name asc")
+//    List<Product> getAllProducts();
 
     @Query("select p from Product p where id=:id")
     public Product getProductNamebyId(int id);

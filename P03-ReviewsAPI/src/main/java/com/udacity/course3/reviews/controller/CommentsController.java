@@ -19,22 +19,21 @@ import java.util.List;
 @RequestMapping("/comments")
 public class CommentsController {
 
-    // TODO: Wire needed JPA repositories here
     @Autowired
     private ReviewsRepository reviewsRepository;
     @Autowired
     private CommentsRepository commentsRepository;
 
-    /**
-     * Creates a comment for a review.
-     *
-     * 1. Add argument for comment entity. Use {@link RequestBody} annotation.
-     * 2. Check for existence of review.
-     * 3. If review not found, return NOT_FOUND.
-     * 4. If found, save comment.
-     *
-     * @param reviewId The id of the review.
-     */
+    /********************************************************************************
+    * Creates a comment for a review.
+    /********************************************************************************
+    * 1. Add argument for comment entity. Use {@link RequestBody} annotation.
+    * 2. Check for existence of review.
+    * 3. If review not found, return NOT_FOUND.
+    * 4. If found, save comment.
+    /********************************************************************************
+    * @param reviewId The id of the review.
+    /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.POST)
     public ResponseEntity<?> createCommentForReview(@RequestBody Comments comments, @PathVariable("reviewId") Integer reviewId) {
 
@@ -51,21 +50,19 @@ public class CommentsController {
         return new ResponseEntity<Comments>(c, HttpStatus.OK);
     }
 
-    /**
-     * List comments for a review.
-     *
-     * 2. Check for existence of review.
-     * 3. If review not found, return NOT_FOUND.
-     * 4. If found, return list of comments.
-     *
-     * @param reviewId The id of the review.
-     */
+    /********************************************************************************
+    * List comments for a review.
+    /********************************************************************************
+    * 2. Check for existence of review.
+    * 3. If review not found, return NOT_FOUND.
+    * 4. If found, return list of comments.
+    /********************************************************************************
+    * @param reviewId The id of the review.
+    /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
-    //public List<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
-
     public ResponseEntity<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
         List<Comments> list = commentsRepository.getCommentsbyReviewId(reviewId);
-        if (list.isEmpty()) { return new ResponseEntity("404: Review/Comment Not found", HttpStatus.NOT_FOUND); }
+        if (list.isEmpty()) throw new ReviewsNotFoundException();
         return new ResponseEntity<List<Comments>>(list, HttpStatus.OK);
     }
 }

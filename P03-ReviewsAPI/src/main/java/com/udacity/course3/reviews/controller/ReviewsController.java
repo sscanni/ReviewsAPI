@@ -26,18 +26,17 @@ public class ReviewsController {
     @Autowired
     private ReviewsRepository reviewsRepository;
 
-        /**
-     * Creates a review for a product.
-     * <p>
-     * 1. Add argument for review entity. Use {@link RequestBody} annotation.
-     * 2. Check for existence of product.
-     * 3. If product not found, return NOT_FOUND.
-     * 4. If found, save review.
-     *
-     * @param productId The id of the product.
-     * @return The created review or 404 if product id is not found.
-     */
-
+    /******************************************************************************
+    * Creates a review for a product.
+    /******************************************************************************
+    * 1. Add argument for review entity. Use {@link RequestBody} annotation.
+    * 2. Check for existence of product.
+    * 3. If product not found, return NOT_FOUND.
+    * 4. If found, save review.
+    /******************************************************************************
+    * @param productId The id of the product.
+    * @return The created review or 404 if product id is not found.
+    /******************************************************************************/
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.POST)
     public ResponseEntity<?> createReviewForProduct(@RequestBody Comments comments,
                                             @PathVariable("productId") Integer productId) {
@@ -66,12 +65,12 @@ public class ReviewsController {
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
 
-    /**
-     * Lists reviews by product.
-     *
-     * @param productId The id of the product.
-     * @return The list of reviews.
-     */
+    /*******************************************************************************
+    * Lists reviews by product.
+    /*******************************************************************************
+    * @param productId The id of the product.
+    * @return The list of reviews.
+    /******************************************************************************/
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.GET)
     public ResponseEntity<List<?>> listReviewsForProduct(@PathVariable("productId") Integer productId) {
         Product product = productRepository.findById(productId)

@@ -18,16 +18,15 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductsController {
 
-    // TODO: Wire JPA repositories here
     @Autowired
     private ProductRepository productRepository;
 
-    /**
+    /*******************************************************************************
      * Creates a product.
-     *
+    /******************************************************************************
      * 1. Accept product as argument. Use {@link RequestBody} annotation.
      * 2. Save product.
-     */
+    /******************************************************************************/
     @RequestMapping(value = "/", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@Valid @RequestBody Product product) {
@@ -44,30 +43,26 @@ public class ProductsController {
 
         productRepository.save(product);
     }
-
-    /**
-     * Finds a product by id.
-     *
-     * @param id The id of the product.
-     * @return The product if found, or a 404 not found.
-     */
+    /*******************************************************************************
+    * Finds a product by id.
+    /*******************************************************************************
+    * @param id The id of the product.
+    * @return The product if found, or a 404 not found.
+    /*******************************************************************************/
     @RequestMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
-
         Product product = productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
-
-    /**
-     * Lists all products.
-     *
-     * @return The list of products.
-     */
+    /*******************************************************************************
+    * Lists all products.
+    ********************************************************************************
+    * @return The list of products.
+    ********************************************************************************/
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public List<?> listProducts() {
-        //List<Product> list = (List<Product>) productRepository.findAll();
-        List<Product> list = productRepository.getAllProducts();
+    public List<Product> listProducts() {
+        List<Product> list = productRepository.findAll();
         return list;
     }
 }
