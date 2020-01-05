@@ -26,16 +26,5 @@ public class SwaggerConfig {
                 .build()
                 .useDefaultResponseMessages(false);
     }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "Reviews API",
-                "A REST API for products and reviews.",
-                "1.0",
-                "http://www.udacity.com/tos",
-                new Contact("Steven Scanniello", "www.udacity.com", "myeaddress@udacity.com"),
-                "License of API", "http://www.udacity.com/license", Collections.emptyList());
-    }
-
 }
 
