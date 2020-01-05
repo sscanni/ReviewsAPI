@@ -5,7 +5,7 @@ import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
 import com.udacity.course3.reviews.entity.Comments;
 import com.udacity.course3.reviews.entity.Product;
-import com.udacity.course3.reviews.entity.Reviews;
+import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.service.ProductNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,8 +74,8 @@ public class ReviewsApplicationTests {
 		Product product = productRepository.findById(1)
 				.orElseThrow(ProductNotFoundException::new);
 
-		List<Reviews> curReviews = product.getReviews();
-		Reviews reviews = new Reviews();
+		List<Review> curReviews = product.getReviews();
+		Review reviews = new Review();
 		reviews.setProdid(1);
 		curReviews.add(reviews);
 		product.setReviews(curReviews);

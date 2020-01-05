@@ -4,7 +4,7 @@ import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
 import com.udacity.course3.reviews.entity.Comments;
 import com.udacity.course3.reviews.entity.Product;
-import com.udacity.course3.reviews.entity.Reviews;
+import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.service.ProductNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,8 +44,8 @@ public class ReviewsController {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        List<Reviews> curReviews = product.getReviews();
-        Reviews reviews = new Reviews();
+        List<Review> curReviews = product.getReviews();
+        Review reviews = new Review();
         reviews.setProdid(productId);
 
         curReviews.add(reviews);
@@ -76,7 +76,7 @@ public class ReviewsController {
         Product product = productRepository.findById(productId)
                 .orElseThrow(ProductNotFoundException::new);
 
-        List<Reviews> reviews = product.getReviews();
+        List<Review> reviews = product.getReviews();
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

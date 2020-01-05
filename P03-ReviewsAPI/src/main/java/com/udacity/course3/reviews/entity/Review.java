@@ -5,24 +5,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "product")
-public class Product {
+@Table(name = "reviews")
+public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reviewid")
+    private Integer reviewid;
+
     @Column(name = "prodid")
     private Integer prodid;
 
-    @Column(name = "name")
-    private String name;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prodid", referencedColumnName = "prodid")
-    private List<Review> reviews;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reviewid", referencedColumnName = "reviewid")
+    private Comments comments;
 }

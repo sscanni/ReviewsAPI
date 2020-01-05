@@ -1,8 +1,15 @@
 package com.udacity.course3.reviews.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "comments")
 public class Comments {
 
@@ -16,19 +23,4 @@ public class Comments {
 
     @Column(name = "reviewid")
     private Integer reviewid;
-
-    public Comments() { }
-
-    public Integer getId() { return id; }
-
-    public void setId(Integer id) { this.id = id; }
-
-    public String getComment() { return comment; }
-
-    public void setComment(String comment) { this.comment = comment; }
-
-    public Integer getReviewid() { return reviewid; }
-
-    public void setReviewid(Integer reviewid) { this.reviewid = reviewid; }
-
 }
