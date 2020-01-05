@@ -1,7 +1,6 @@
 package com.udacity.course3.reviews.ReviewRepository;
 
 import com.udacity.course3.reviews.entity.Comments;
-import com.udacity.course3.reviews.entity.Reviews;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

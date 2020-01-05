@@ -8,8 +8,4 @@ public class ReviewsNotFoundException extends RuntimeException {
 
     public ReviewsNotFoundException() {
     }
-
-    public ReviewsNotFoundException(String message) {
-        super(message);
-    }
 }

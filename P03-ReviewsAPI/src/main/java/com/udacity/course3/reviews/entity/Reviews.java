@@ -1,9 +1,6 @@
 package com.udacity.course3.reviews.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "reviews")
@@ -38,6 +35,5 @@ public class Reviews {
     public Integer getProdid() { return prodid; }
 
     public void setProdid(Integer prodid) { this.prodid = prodid; }
-
 
 }
