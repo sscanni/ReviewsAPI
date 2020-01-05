@@ -2,7 +2,7 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.ReviewRepository.CommentsRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
-import com.udacity.course3.reviews.entity.Comments;
+import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.service.ReviewsNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,19 +35,19 @@ public class CommentsController {
     * @param reviewId The id of the review.
     /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.POST)
-    public ResponseEntity<?> createCommentForReview(@RequestBody Comments comments, @PathVariable("reviewId") Integer reviewId) {
+    public ResponseEntity<?> createCommentForReview(@RequestBody Comment comments, @PathVariable("reviewId") Integer reviewId) {
 
         Review reviews = reviewsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
-        Comments c = commentsRepository.findById(reviewId)
+        Comment c = commentsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
         c.setComment(comments.getComment());
         reviews.setComments(c);
 
         reviewsRepository.save(reviews);
-        return new ResponseEntity<Comments>(c, HttpStatus.OK);
+        return new ResponseEntity<Comment>(c, HttpStatus.OK);
     }
 
     /********************************************************************************
@@ -61,8 +61,8 @@ public class CommentsController {
     /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
     public ResponseEntity<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
-        List<Comments> list = commentsRepository.getCommentsbyReviewId(reviewId);
+        List<Comment> list = commentsRepository.getCommentsbyReviewId(reviewId);
         if (list.isEmpty()) throw new ReviewsNotFoundException();
-        return new ResponseEntity<List<Comments>>(list, HttpStatus.OK);
+        return new ResponseEntity<List<Comment>>(list, HttpStatus.OK);
     }
 }

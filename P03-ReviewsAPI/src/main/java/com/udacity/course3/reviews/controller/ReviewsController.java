@@ -2,7 +2,7 @@ package com.udacity.course3.reviews.controller;
 
 import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
-import com.udacity.course3.reviews.entity.Comments;
+import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.service.ProductNotFoundException;
@@ -38,7 +38,7 @@ public class ReviewsController {
     * @return The created review or 404 if product id is not found.
     /******************************************************************************/
     @RequestMapping(value = "/reviews/products/{productId}", method = RequestMethod.POST)
-    public ResponseEntity<?> createReviewForProduct(@RequestBody Comments comments,
+    public ResponseEntity<?> createReviewForProduct(@RequestBody Comment comments,
                                             @PathVariable("productId") Integer productId) {
 
         Product product = productRepository.findById(productId)

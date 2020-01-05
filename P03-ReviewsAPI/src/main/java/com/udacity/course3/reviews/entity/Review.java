@@ -23,5 +23,5 @@ public class Review {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "reviewid", referencedColumnName = "reviewid")
-    private Comments comments;
+    private Comment comments;
 }

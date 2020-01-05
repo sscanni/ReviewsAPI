@@ -3,7 +3,7 @@ package com.udacity.course3.reviews;
 import com.udacity.course3.reviews.ReviewRepository.CommentsRepository;
 import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
-import com.udacity.course3.reviews.entity.Comments;
+import com.udacity.course3.reviews.entity.Comment;
 import com.udacity.course3.reviews.entity.Product;
 import com.udacity.course3.reviews.entity.Review;
 import com.udacity.course3.reviews.service.ProductNotFoundException;
@@ -82,7 +82,7 @@ public class ReviewsApplicationTests {
 
 		reviews = reviewsRepository.save(reviews);
 
-		Comments comments = new Comments();
+		Comment comments = new Comment();
 		comments.setReviewid(reviews.getReviewid());
 		comments.setComment(reviewComment2);
 		reviews.setComments(comments);
@@ -100,7 +100,7 @@ public class ReviewsApplicationTests {
 	}
 	@Test
 	public void testComments() {
-		List<Comments> comments = commentsRepository.getCommentsbyReviewId(1);
+		List<Comment> comments = commentsRepository.getCommentsbyReviewId(1);
 		assertThat(comments.size()).isEqualTo(1);
 		assertThat(comments.get(0).getComment()).isEqualTo(reviewComment1);
 	}
