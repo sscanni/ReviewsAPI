@@ -7,13 +7,15 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+/**
+ * The type Review.
+ */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "reviews")
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reviewid")

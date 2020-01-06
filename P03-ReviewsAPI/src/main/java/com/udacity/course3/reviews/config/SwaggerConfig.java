@@ -8,9 +8,28 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * SwaggerConfig
+ * <p>
+ * Swagger configuration to test the following end points:
+ * <p>
+ * POST /products/
+ * GET /products/
+ * GET /products/{id}
+ * POST comments/reviews/{reviewId}
+ * GET comments/reviews/{reviewId}
+ * POST reviews/products/{productId}
+ * GET reviews/products/{productId}
+ *
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+    /**
+     * Api docket.
+     *
+     * @return the docket
+     */
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)

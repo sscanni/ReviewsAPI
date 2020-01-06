@@ -33,6 +33,7 @@ public class CommentsController {
     * 4. If found, save comment.
     /********************************************************************************
     * @param reviewId The id of the review.
+    * @param comments The comment request body
     /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.POST)
     public ResponseEntity<?> createCommentForReview(@RequestBody Comment comments, @PathVariable("reviewId") Integer reviewId) {
@@ -40,20 +41,10 @@ public class CommentsController {
         Review reviews = reviewsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
-//        Comment c = commentsRepository.findById(reviewId)
-//                .orElseThrow(ReviewsNotFoundException::new);
-//
-//        c.setComment(comments.getComment());
-//        reviews.setComments(c);
-
         Comment newComment = new Comment();
-
         newComment.setReviewid(reviews.getReviewid());
         newComment.setComment(comments.getComment());
-
         commentsRepository.save(newComment);
-
-//        reviewsRepository.save(reviews);
 
         return new ResponseEntity<Comment>(newComment, HttpStatus.OK);
     }
@@ -69,8 +60,12 @@ public class CommentsController {
     /********************************************************************************/
     @RequestMapping(value = "/reviews/{reviewId}", method = RequestMethod.GET)
     public ResponseEntity<?> listCommentsForReview(@PathVariable("reviewId") Integer reviewId) {
-        List<Comment> list = commentsRepository.getCommentsbyReviewId(reviewId);
-        if (list.isEmpty()) throw new ReviewsNotFoundException();
+
+        Review reviews = reviewsRepository.findById(reviewId)
+                .orElseThrow(ReviewsNotFoundException::new);
+
+        List<Comment> list = reviews.getComments();
+
         return new ResponseEntity<List<Comment>>(list, HttpStatus.OK);
     }
 }

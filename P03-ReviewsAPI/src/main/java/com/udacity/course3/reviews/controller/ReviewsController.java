@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,23 +52,24 @@ public class ReviewsController {
 
         Review reviews = new Review();
         reviews.setProdid(productId);
+        reviews.setComments(new ArrayList());
 
         curReviews.add(reviews);
         product.setReviews(curReviews);
 
-        reviews = reviewsRepository.saveAndFlush(reviews);
+        reviews = reviewsRepository.save(reviews);
 
         Comment newComment = new Comment();
-
         newComment.setReviewid(reviews.getReviewid());
         newComment.setComment(comments.getComment());
 
-        commentsRepository.saveAndFlush(newComment);
+        commentsRepository.save(newComment);
 
-        Review newReview = reviewsRepository.findById(reviews.getReviewid())
-                .orElseThrow(ProductNotFoundException::new);
+        List<Comment> comList = new ArrayList<>();
+        comList.add(newComment);
+        reviews.setComments(comList);
 
-        return new ResponseEntity<>(newReview, HttpStatus.OK);
+        return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 
     /*******************************************************************************
