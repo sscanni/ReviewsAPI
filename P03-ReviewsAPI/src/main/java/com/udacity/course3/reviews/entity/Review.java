@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ public class Review {
     @Column(name = "prodid")
     private Integer prodid;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "reviewid", referencedColumnName = "reviewid")
-    private Comment comments;
+    private List<Comment> comments;
 }

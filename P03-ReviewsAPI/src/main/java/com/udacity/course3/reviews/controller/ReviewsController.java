@@ -1,5 +1,6 @@
 package com.udacity.course3.reviews.controller;
 
+import com.udacity.course3.reviews.ReviewRepository.CommentsRepository;
 import com.udacity.course3.reviews.ReviewRepository.ProductRepository;
 import com.udacity.course3.reviews.ReviewRepository.ReviewsRepository;
 import com.udacity.course3.reviews.entity.Comment;
@@ -25,6 +26,8 @@ public class ReviewsController {
     private ProductRepository productRepository;
     @Autowired
     private ReviewsRepository reviewsRepository;
+    @Autowired
+    private CommentsRepository commentsRepository;
 
     /******************************************************************************
     * Creates a review for a product.
@@ -45,24 +48,26 @@ public class ReviewsController {
                 .orElseThrow(ProductNotFoundException::new);
 
         List<Review> curReviews = product.getReviews();
+
         Review reviews = new Review();
         reviews.setProdid(productId);
 
         curReviews.add(reviews);
         product.setReviews(curReviews);
 
-        reviews = reviewsRepository.save(reviews);
+        reviews = reviewsRepository.saveAndFlush(reviews);
 
-        comments.setReviewid(reviews.getReviewid());
-        comments.setComment(comments.getComment());
-        reviews.setComments(comments);
+        Comment newComment = new Comment();
 
-        reviewsRepository.save(reviews);
+        newComment.setReviewid(reviews.getReviewid());
+        newComment.setComment(comments.getComment());
 
-        Product updatedProduct = productRepository.findById(productId)
+        commentsRepository.saveAndFlush(newComment);
+
+        Review newReview = reviewsRepository.findById(reviews.getReviewid())
                 .orElseThrow(ProductNotFoundException::new);
 
-        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        return new ResponseEntity<>(newReview, HttpStatus.OK);
     }
 
     /*******************************************************************************
@@ -77,6 +82,7 @@ public class ReviewsController {
                 .orElseThrow(ProductNotFoundException::new);
 
         List<Review> reviews = product.getReviews();
+
         return new ResponseEntity<>(reviews, HttpStatus.OK);
     }
 }

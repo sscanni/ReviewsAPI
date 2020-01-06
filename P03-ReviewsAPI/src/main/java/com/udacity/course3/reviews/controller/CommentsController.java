@@ -40,14 +40,22 @@ public class CommentsController {
         Review reviews = reviewsRepository.findById(reviewId)
                 .orElseThrow(ReviewsNotFoundException::new);
 
-        Comment c = commentsRepository.findById(reviewId)
-                .orElseThrow(ReviewsNotFoundException::new);
+//        Comment c = commentsRepository.findById(reviewId)
+//                .orElseThrow(ReviewsNotFoundException::new);
+//
+//        c.setComment(comments.getComment());
+//        reviews.setComments(c);
 
-        c.setComment(comments.getComment());
-        reviews.setComments(c);
+        Comment newComment = new Comment();
 
-        reviewsRepository.save(reviews);
-        return new ResponseEntity<Comment>(c, HttpStatus.OK);
+        newComment.setReviewid(reviews.getReviewid());
+        newComment.setComment(comments.getComment());
+
+        commentsRepository.save(newComment);
+
+//        reviewsRepository.save(reviews);
+
+        return new ResponseEntity<Comment>(newComment, HttpStatus.OK);
     }
 
     /********************************************************************************
