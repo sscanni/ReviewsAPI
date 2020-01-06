@@ -6,13 +6,15 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+/**
+ * The type Comment.
+ */
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "comments")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
